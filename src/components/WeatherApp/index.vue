@@ -12,7 +12,7 @@ const app = getCurrentInstance(),
 
 const state = globalStore();
 
-function getWeather(city) {
+function getWeather(city:string):void {
   axios.get(weatherAPIURL + `?key=${apiKey}&q=${city}&days=${days}`)
       .then(response => {
         state.setData(response.data);

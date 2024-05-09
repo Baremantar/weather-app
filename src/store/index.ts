@@ -10,7 +10,7 @@ export const globalStore = defineStore('globalStore', {
         }
     },
     getters: {
-        getForecastData(state):object {
+        getForecastData(state): object {
             return state.store?.forecast;
         }
     }
