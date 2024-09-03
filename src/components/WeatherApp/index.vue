@@ -1,38 +1,42 @@
 <script setup lang="ts">
 import WeatherTileList from "./WeatherTileList.vue";
-import axios from "axios";
-import {getCurrentInstance} from "vue";
 import {globalStore} from "../../store";
+import {computed, getCurrentInstance, onBeforeMount} from "vue";
 
-const app = getCurrentInstance(),
-    apiKey = app?.appContext.config.globalProperties.$weatherAPIKey,
-    weatherAPIURL: string = app?.appContext.config.globalProperties.$weatherAPIURL,
-    currentCity: string = 'London',
-    days: number = 3;
+const instance = getCurrentInstance();
+const store = globalStore();
 
-const state = globalStore();
+onBeforeMount(() => {
+  if (instance && instance.proxy) {
+    store.setData('Sevastopol', {
+      apiKey: instance.proxy.$weatherAPIKey ?? 'error',
+      weatherAPIURL: instance.proxy.$weatherAPIURL ?? 'error',
+      defaultCity: 'Moscow',
+      days: 3,
+    });
+  }
+});
 
-function getWeather(city:string):void {
-  axios.get(weatherAPIURL + `?key=${apiKey}&q=${city}&days=${days}`)
-      .then(response => {
-        state.setData(response.data);
-      })
-      .catch(error => console.log(error));
-}
+const forecastData = computed(() => {
+  return store.getForecastData;
+})
 
-getWeather(currentCity);
 </script>
 
 <template>
   <div class="container">
-    <WeatherTileList :forecast="state.getForecastData?.forecastday"/>
+    <WeatherTileList v-if="forecastData" :forecast="forecastData"/>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .container {
   display: flex;
   height: 33.3vh;
   width: 100%;
+
+  @media (max-width: 768px) {
+    height: 66.6vh;
+  }
 }
 </style>

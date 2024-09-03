@@ -1,17 +1,30 @@
 import {defineStore} from "pinia";
+import {requestData, weatherData, forecastdayItem} from "../helpers/types.ts";
+import axios, {AxiosResponse} from "axios";
 
 export const globalStore = defineStore('globalStore', {
     state: () => ({
-        store: {}
+        weatherData: {} as weatherData,
     }),
     actions: {
-        setData(data: object) {
-            this.store = {...data};
+        async setData(city: string, data: requestData): Promise<void> {
+            try {
+                const res:AxiosResponse<weatherData> = await axios.get(data.weatherAPIURL, {
+                    params: {
+                        key: data.apiKey,
+                        q: city ? city : data.defaultCity,
+                        days: data.days,
+                    },
+                })
+                this.weatherData = res.data;
+            } catch (error){
+                console.log(error)
+            }
         }
     },
     getters: {
-        getForecastData(state): object {
-            return state.store?.forecast;
+        getForecastData(state):Array<forecastdayItem> {
+            return state.weatherData?.forecast?.forecastday;
         }
     }
 })

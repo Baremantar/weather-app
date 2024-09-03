@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import {forecastdayItem} from "../../helpers/types.ts";
+
 const props = defineProps<{
-  data: object
+  data: forecastdayItem
 }>()
 
 const day = props.data;
@@ -8,14 +10,14 @@ const day = props.data;
 
 <template>
   <div class="weather-tile__wrapper">
-    <h2>{{ day?.date }}</h2>
-    <p>avgtemp_c: {{day?.day.avgtemp_c}}</p>
-    <p>maxtemp_c: {{day?.day.maxtemp_c}}</p>
-    <p>mintemp_c: {{day?.day.mintemp_c}}</p>
+    <h2>{{ day.date }}</h2>
+    <p>Average temperature: {{day.day.avgtemp_c}}°C</p>
+    <p>Max temperature: {{day.day.maxtemp_c}}°C</p>
+    <p>Min temperature: {{day.day.mintemp_c}}°C</p>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .weather-tile__wrapper {
   display: flex;
   flex-direction: column;
@@ -26,6 +28,9 @@ const day = props.data;
   background: var(--color-background);
   border-radius: 20px;
 
-
+  h2 {
+    text-align: center;
+  }
 }
+
 </style>
