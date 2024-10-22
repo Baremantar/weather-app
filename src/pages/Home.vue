@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import WeatherApp from "../components/WeatherApp/index.vue";
-
 const backgroundImageURL: string = '/mountain.gif';
 
 </script>
